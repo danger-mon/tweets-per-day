@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+		<script>
+		function DifferenceInDate(date)
+		{
+			var d = new Date(date);
+			var t = new Date();
+			var dt = d.getTime();
+			var tt = t.getTime();
+			var dif = Math.ceil((tt-dt)/(1000*60*60*24));
+			return dif;
+		}
+		function go(){
+			d = $("#box").val();
+		    $.ajax(
+			    {     
+	            url : "http://twitter.com/users/lookup.json?screen_name="+ d +"&callback=?",  
+	            dataType : "json",  
+	            timeout:15000,  
+	      
+	            success : function(data)  
+	            {   
+
+		            var n = DifferenceInDate(data.created_at);
+		            var totalTweets = data.statuses_count;
+		            var tpd = totalTweets / n;
+		            var rounded = Math.round(tpd * 100) / 100;
+
+		     		$("#data").html("<p>" + rounded +"</p>");  
+		            console.log(data);
+	            },  
+	      
+	            error : function()  
+	            {   
+	                $("#data").html("<p>Could not connect to server, is screen_name correct?</p>");
+	            },
+	      		}
+	      	); 
+		}
+        </script>
+	</head>
+	
+	<body>
+		<input type="text" id="box"></input>
+		<button onclick="go()">hello</button>
+		<div id="data">
+		</div>
+	</body>
+</html>
